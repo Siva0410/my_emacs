@@ -59,6 +59,16 @@
 ;; "yes or no" の選択を "y or n" にする
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; bufferの最後でカーソルを動かそうとしても音をならなくする
+(defun next-line (arg)
+  (interactive "p")
+  (condition-case nil
+      (line-move arg)
+    (end-of-buffer)))
+
+;; エラー音をならなくする
+(setq ring-bell-function 'ignore)
+
 ;;----------------------------------------------;;
 ;;              KEYBOARD CONFIG
 ;;----------------------------------------------;;
@@ -73,6 +83,25 @@
 ;;                 CODE CONFIG
 ;;----------------------------------------------;;
 
+;; ivy設定
+(require 'ivy)
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+(setq ivy-height 30) ;; minibufferのサイズを拡大！（重要）
+(setq ivy-extra-directories nil)
+(setq ivy-re-builders-alist
+      '((t . ivy--regex-plus)))
+
+;; counsel設定
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file) ;; find-fileもcounsel任せ！
+(setq counsel-find-file-ignore-regexp (regexp-opt '("./" "../")))
+
+
+(global-set-key "\C-s" 'swiper)
+(setq swiper-include-line-number-in-search t) ;; line-numberでも検索可能
+
 ;;Rainbow-delimiters
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (custom-set-variables
@@ -85,7 +114,7 @@
     ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
  '(package-selected-packages
    (quote
-    (magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
+    (counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
