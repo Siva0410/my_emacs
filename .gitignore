@@ -4,6 +4,7 @@ games/
 theme/
 lisp/
 url/
+eshell/
 network-security.data
 history
 kkcrc
