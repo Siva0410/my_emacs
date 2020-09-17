@@ -9,7 +9,6 @@
 ;;----------------------------------------------;;
 
 ;;PowerLine
-(add-to-list 'load-path "~/.emacs.d/lisp/powerline/")
 (require 'powerline)
 (powerline-default-theme)
 
@@ -30,7 +29,6 @@
 ;;----------------------------------------------;;
 
 ;;theme config
-(add-to-list 'custom-theme-load-path "~/.emacs.d/theme/atom-one-dark-theme/")
 (load-theme 'atom-one-dark t)
 
 ;; ウィンドウを透明にする
