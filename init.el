@@ -1,39 +1,48 @@
 ;; auto-install
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
-(require 'auto-install)
-(auto-install-update-emacswiki-package-name t)
-(auto-install-compatibility-setup)
+;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
+;; (require 'auto-install)
+;; (auto-install-update-emacswiki-package-name t)
+;; (auto-install-compatibility-setup)
 
 ;;MELPA
+;; (require 'package)
+;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+;; (package-initialize)
+
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+
+;; package-archivesを上書き
+(setq package-archives
+      '(("melpa" . "https://melpa.org/packages/")
+        ;; ("melpa-stable" . "https://stable.melpa.org/packages/")
+        ("org" . "https://orgmode.org/elpa/")
+        ("gnu" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
-;;----------------------------------------------;;
-;;              MODE LINE CONFIG
-;;----------------------------------------------;;
+(unless package-archive-contents (package-refresh-contents))
 
-;;PowerLine
-(require 'powerline)
-(powerline-default-theme)
-
-;;smart-mode-line
-(defvar sml/no-confirm-load-theme t)
-(defvar sml/theme 'dark) 
-(defvar sml/shorten-directory -1)
-(sml/setup)
-
-(column-number-mode t) ;; modelineに列番号の表示
-(line-number-mode t) ;; modelineに行番号の表示
-
-;;  行番号を表示
-(if (version<= "26.0.50" emacs-version)
-      (global-display-line-numbers-mode))
-
-;;nyan-mode
-(nyan-mode 1)
-
+;; 以下、追加するパッケージ
+(unless (package-installed-p 'atom-one-dark-theme)
+  (package-install 'atom-one-dark-theme))
+(unless (package-installed-p 'powerline)
+  (package-install 'powerline))
+(unless (package-installed-p 'smart-mode-line)
+  (package-install 'smart-mode-line))
+(unless (package-installed-p 'nyan-mode)
+  (package-install 'nyan-mode))
+(unless (package-installed-p 'rainbow-delimiters)
+  (package-install 'rainbow-delimiters))
+(unless (package-installed-p 'counsel)
+  (package-install 'counsel))
+(unless (package-installed-p 'sequential-command)
+  (package-install 'sequential-command))
+(unless (package-installed-p 'elpy)
+  (package-install 'elpy))
+(unless (package-installed-p 'smartrep)
+  (package-install 'smartrep))
+(unless (package-installed-p 'magit)
+  (package-install 'magit))
 ;;----------------------------------------------;;
 ;;                FLAME CONFIG
 ;;----------------------------------------------;;
@@ -55,6 +64,30 @@
 
 ;;delete Menu bar 
 (menu-bar-mode 0)
+
+;;  行番号を表示
+(if (version<= "26.0.50" emacs-version)
+    (global-display-line-numbers-mode))
+
+;;----------------------------------------------;;
+;;              MODE LINE CONFIG
+;;----------------------------------------------;;
+
+;;PowerLine
+(require 'powerline)
+(powerline-default-theme)
+
+;;smart-mode-line
+(defvar sml/no-confirm-load-theme t)
+(defvar sml/theme 'dark) 
+(defvar sml/shorten-directory -1)
+(sml/setup)
+
+(column-number-mode t) ;; modelineに列番号の表示
+(line-number-mode t) ;; modelineに行番号の表示
+
+;;nyan-mode
+(nyan-mode 1)
 
 ;;----------------------------------------------;;
 ;;               SYSTEM CONFIG
