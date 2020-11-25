@@ -1,4 +1,4 @@
-;; ;; auto-install
+;; auto-install
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
 (require 'auto-install)
 (auto-install-update-emacswiki-package-name t)
@@ -24,8 +24,12 @@
 (defvar sml/shorten-directory -1)
 (sml/setup)
 
-(column-number-mode t) ;; 列番号の表示
-(line-number-mode t) ;; 行番号の表示
+(column-number-mode t) ;; modelineに列番号の表示
+(line-number-mode t) ;; modelineに行番号の表示
+
+;;  行番号を表示
+(if (version<= "26.0.50" emacs-version)
+      (global-display-line-numbers-mode))
 
 ;;nyan-mode
 (nyan-mode 1)
@@ -133,7 +137,8 @@
 
 ;;company-mode
 (require 'company)
-;;(global-company-mode) ; 全バッファで有効にする 
+(global-company-mode) ; 全バッファで有効にする
+
 (with-eval-after-load 'company
   (setq company-auto-expand t) ;; 1個目を自動的に補完
   (setq company-transformers '(company-sort-by-backend-importance)) ;; ソート順
