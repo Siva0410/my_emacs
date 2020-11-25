@@ -78,6 +78,9 @@
 ;;----------------------------------------------;;
 ;;              KEYBOARD CONFIG
 ;;----------------------------------------------;;
+;; expand C-a C-a and C-e C-e
+(require 'sequential-command-config)
+(sequential-command-setup-keys)
 
 ;;C-h => backspace
 (global-set-key "\C-h" 'delete-backward-char)
