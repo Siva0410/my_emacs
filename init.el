@@ -43,6 +43,8 @@
   (package-install 'smartrep))
 (unless (package-installed-p 'magit)
   (package-install 'magit))
+(unless (package-installed-p 'ox-hugo)
+  (package-install 'ox-hugo))
 ;;----------------------------------------------;;
 ;;                FLAME CONFIG
 ;;----------------------------------------------;;
@@ -189,6 +191,12 @@
   (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer) ;; ドキュメント表示はC-Shift-h
 )
 
+;;----------------------------------------------;;
+;;               ORG-MODE CONFIG
+;;----------------------------------------------;;
+
+(with-eval-after-load 'ox
+  (require 'ox-hugo))
 
 ;;----------------------------------------------;;
 ;;                 PYTHON CONFIG
