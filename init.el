@@ -45,8 +45,11 @@
   (package-install 'magit))
 (unless (package-installed-p 'ox-hugo)
   (package-install 'ox-hugo))
+(unless (package-installed-p 'browse-kill-ring)
+  (package-install 'browse-kill-ring))
+
 ;;----------------------------------------------;;
-;;                FLAME CONFIG
+;;                FLAME CONFIG                  ;;
 ;;----------------------------------------------;;
 
 ;;theme config
@@ -72,7 +75,7 @@
     (global-display-line-numbers-mode))
 
 ;;----------------------------------------------;;
-;;              MODE LINE CONFIG
+;;              MODE LINE CONFIG                ;;
 ;;----------------------------------------------;;
 
 ;;PowerLine
@@ -92,7 +95,7 @@
 (nyan-mode 1)
 
 ;;----------------------------------------------;;
-;;               SYSTEM CONFIG
+;;               SYSTEM CONFIG                  ;;
 ;;----------------------------------------------;;
 
 ;; バックアップファイルを作らない
@@ -115,7 +118,7 @@
 (setq ring-bell-function 'ignore)
 
 ;;----------------------------------------------;;
-;;              KEYBOARD CONFIG
+;;              KEYBOARD CONFIG                 ;;
 ;;----------------------------------------------;;
 ;; expand C-a C-a and C-e C-e
 (require 'sequential-command-config)
@@ -136,7 +139,7 @@
 (global-set-key (kbd "C-t") 'other-window-or-split)
 
 ;;----------------------------------------------;;
-;;                 CODE CONFIG
+;;                 CODE CONFIG                  ;;
 ;;----------------------------------------------;;
 
 ;; ivy設定
@@ -170,7 +173,7 @@
     ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
  '(package-selected-packages
    (quote
-    (counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
+    (browse-kill-ring counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -200,18 +203,27 @@
 )
 
 ;;----------------------------------------------;;
-;;               ORG-MODE CONFIG
+;;               ORG-MODE CONFIG                ;;
 ;;----------------------------------------------;;
 
 (with-eval-after-load 'ox
   (require 'ox-hugo))
 
-
+;;----------------------------------------------;;
+;;               DIRED-MODE CONFIG              ;;
+;;----------------------------------------------;;
 (add-hook 'dired-mode-hook
 	  (define-key dired-mode-map (kbd "\C-t") 'other-window-or-split))
 
 ;;----------------------------------------------;;
-;;                 PYTHON CONFIG
+;;               KILL RING CONFIG               ;;
+;;----------------------------------------------;;
+
+(require 'browse-kill-ring)
+(global-set-key (kbd "C-x C-y") 'browse-kill-ring)
+(browse-kill-ring-default-keybindings)
+;;----------------------------------------------;;
+;;                 PYTHON CONFIG                ;;
 ;;----------------------------------------------;;
 
 ;;elpy enable
