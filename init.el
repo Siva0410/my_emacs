@@ -127,6 +127,14 @@
 ;;magit
 (global-set-key (kbd "C-x g") 'magit-status)
 
+;;C-t other window
+(defun other-window-or-split ()
+  (interactive)
+  (when (one-window-p) (split-window-horizontally))
+  (other-window 1))
+
+(global-set-key (kbd "C-t") 'other-window-or-split)
+
 ;;----------------------------------------------;;
 ;;                 CODE CONFIG
 ;;----------------------------------------------;;
