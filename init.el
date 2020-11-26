@@ -212,8 +212,9 @@
 ;;----------------------------------------------;;
 ;;               DIRED-MODE CONFIG              ;;
 ;;----------------------------------------------;;
-(add-hook 'dired-mode-hook
-	  (define-key dired-mode-map (kbd "\C-t") 'other-window-or-split))
+
+(eval-after-load "dired" '(progn
+  (define-key dired-mode-map (kbd "C-t") 'other-window-or-split) ))
 
 ;;----------------------------------------------;;
 ;;               KILL RING CONFIG               ;;
