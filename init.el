@@ -206,6 +206,10 @@
 (with-eval-after-load 'ox
   (require 'ox-hugo))
 
+
+(add-hook 'dired-mode-hook
+	  (define-key dired-mode-map (kbd "\C-t") 'other-window-or-split))
+
 ;;----------------------------------------------;;
 ;;                 PYTHON CONFIG
 ;;----------------------------------------------;;
