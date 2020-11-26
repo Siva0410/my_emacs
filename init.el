@@ -47,6 +47,8 @@
   (package-install 'ox-hugo))
 (unless (package-installed-p 'browse-kill-ring)
   (package-install 'browse-kill-ring))
+(unless (package-installed-p 'company-jedi)
+  (package-install 'company-jedi))
 
 ;;----------------------------------------------;;
 ;;                FLAME CONFIG                  ;;
@@ -173,7 +175,7 @@
     ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
  '(package-selected-packages
    (quote
-    (browse-kill-ring counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
+    (company-jedi browse-kill-ring counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -186,21 +188,25 @@
 (global-company-mode) ; 全バッファで有効にする
 
 (with-eval-after-load 'company
-  (setq company-auto-expand t) ;; 1個目を自動的に補完
+  (setq company-auto-expand nil) ;; 1個目を自動的に補完
   (setq company-transformers '(company-sort-by-backend-importance)) ;; ソート順
   (setq company-idle-delay 0) ; 遅延なしにすぐ表示
   (setq company-minimum-prefix-length 2) ; デフォルトは4
   (setq company-selection-wrap-around t) ; 候補の最後の次は先頭に戻る
   (setq completion-ignore-case t)
   (setq company-dabbrev-downcase nil)
+  (setq company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")    ; -や_などを含む語句も補完
   (global-set-key (kbd "C-M-i") 'company-complete)
   ;; C-n, C-pで補完候補を次/前の候補を選択
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-active-map [tab] 'company-complete-selection) ;; TABで候補を設定
+  (define-key company-active-map (kbd "C-i") 'company-complete-selection) ;; C-iで候補を設定
   (define-key company-active-map (kbd "C-h") nil) ;; C-hはバックスペース割当のため無効化
   (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer) ;; ドキュメント表示はC-Shift-h
-)
+  (define-key company-active-map (kbd "C-s") 'company-filter-candidates)
+  )
+
 
 ;;----------------------------------------------;;
 ;;               ORG-MODE CONFIG                ;;
@@ -235,6 +241,13 @@
 (when (require 'flyckeck nil t)
   (remove-hook 'elpy-modules 'elpy-module-flymake)
   (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+;;jedi
+;; (require 'jedi-core)
+;; (setq jedi:complete-on-dot t)
+;; (setq jedi:use-shortcuts t)
+;; (add-hook 'python-mode-hook 'jedi:setup)
+;; (add-to-list 'company-backends 'company-jedi) ; backendに追加
 
 (define-key elpy-mode-map (kbd "C-c C-v") 'helm-flycheck)
 (require 'smartrep)   
