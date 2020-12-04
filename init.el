@@ -1,4 +1,4 @@
-;; auto-install
+;; auto-install 
 ;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
 ;; (require 'auto-install)
 ;; (auto-install-update-emacswiki-package-name t)
@@ -205,8 +205,44 @@
   (define-key company-active-map (kbd "C-h") nil) ;; C-hはバックスペース割当のため無効化
   (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer) ;; ドキュメント表示はC-Shift-h
   (define-key company-active-map (kbd "C-s") 'company-filter-candidates)
+
+  (defun company--insert-candidate2 (candidate)
+    (when (> (length candidate) 0)
+      (setq candidate (substring-no-properties candidate))
+      (if (eq (company-call-backend 'ignore-case) 'keep-prefix)
+	  (insert (company-strip-prefix candidate))
+	(if (equal company-prefix candidate)
+	    (company-select-next)
+          (delete-region (- (point) (length company-prefix)) (point))
+	  (insert candidate))
+	)))
+
+  (defun company-complete-common2 ()
+    (interactive)
+    (when (company-manual-begin)
+      (if (and (not (cdr company-candidates))
+	       (equal company-common (car company-candidates)))
+	  (company-complete-selection)
+	(company--insert-candidate2 company-common))))
+
+  ;; TABで共通を補完 or next
+  (define-key company-active-map [tab] 'company-complete-common2)
+  (define-key company-active-map [backtab] 'company-select-previous) 
+
+  (defun company-quit-and-enter ()
+    (interactive)
+    (company-abort)
+    (eshell-send-input))
+
+  (when (eshell-mode)
+    (add-hook 'eshell-mode-hook (lambda () (define-key company-active-map (kbd "RET") 'company-quit-and-enter)))
+    (add-hook 'eshell-mode-hook (lambda () (define-key company-active-map [return] 'company-quit-and-enter))))
   )
 
+
+;;----------------------------------------------;;
+;;                 ESHELL CONFIG                ;;
+;;----------------------------------------------;;
 
 ;;----------------------------------------------;;
 ;;               ORG-MODE CONFIG                ;;
