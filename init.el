@@ -18,7 +18,7 @@
         ;; ("melpa-stable" . "https://stable.melpa.org/packages/")
         ("org" . "https://orgmode.org/elpa/")
         ("gnu" . "https://elpa.gnu.org/packages/")))
-(package-initialize) 
+(package-initialize)
 
 (unless package-archive-contents (package-refresh-contents))
 
@@ -139,6 +139,8 @@
   (other-window 1))
 
 (global-set-key (kbd "C-t") 'other-window-or-split)
+
+(global-set-key (kbd "C-;") 'comment-dwim) 
 
 ;;----------------------------------------------;;
 ;;                 CODE CONFIG                  ;;
@@ -275,7 +277,7 @@
 ;;----------------------------------------------;;
 
 (require 'browse-kill-ring)
-(global-set-key (kbd "C-x C-y") 'browse-kill-ring)
+(global-set-key (kbd "C-x y") 'browse-kill-ring)
 (browse-kill-ring-default-keybindings)
 ;;----------------------------------------------;;
 ;;                 PYTHON CONFIG                ;;
