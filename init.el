@@ -140,8 +140,13 @@
 
 (global-set-key (kbd "C-t") 'other-window-or-split)
 
+;; C-; Comment out
 (global-set-key (kbd "C-;") 'comment-dwim) 
 
+;; C-r switch next buffer
+(global-set-key (kbd "C-r") 'switch-to-next-buffer)
+;; M-r switch prev buffer
+(global-set-key (kbd "M-r") 'switch-to-prev-buffer)
 ;;----------------------------------------------;;
 ;;                 CODE CONFIG                  ;;
 ;;----------------------------------------------;;
