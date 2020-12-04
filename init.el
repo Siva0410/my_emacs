@@ -8,7 +8,7 @@
 ;; (require 'package)
 ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-;; (package-initialize)
+;; (package-initialize) 
 
 (require 'package)
 
@@ -18,7 +18,7 @@
         ;; ("melpa-stable" . "https://stable.melpa.org/packages/")
         ("org" . "https://orgmode.org/elpa/")
         ("gnu" . "https://elpa.gnu.org/packages/")))
-(package-initialize)
+(package-initialize) 
 
 (unless package-archive-contents (package-refresh-contents))
 
@@ -206,7 +206,7 @@
   (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer) ;; ドキュメント表示はC-Shift-h
   (define-key company-active-map (kbd "C-s") 'company-filter-candidates)
 
-  (defun company--insert-candidate2 (candidate)
+  (defun company-insert-candidate2 (candidate)
     (when (> (length candidate) 0)
       (setq candidate (substring-no-properties candidate))
       (if (eq (company-call-backend 'ignore-case) 'keep-prefix)
@@ -223,27 +223,39 @@
       (if (and (not (cdr company-candidates))
 	       (equal company-common (car company-candidates)))
 	  (company-complete-selection)
-	(company--insert-candidate2 company-common))))
+	(company-insert-candidate2 company-common))))
 
   ;; TABで共通を補完 or next
   (define-key company-active-map [tab] 'company-complete-common2)
   (define-key company-active-map [backtab] 'company-select-previous) 
 
+
+  ;; C-m or Enter で候補無視して改行(要検討)
   (defun company-quit-and-enter ()
+    (interactive)
+    (company-abort)
+    (newline))
+
+  (defun company-eshell-quit-and-enter ()
     (interactive)
     (company-abort)
     (eshell-send-input))
 
-  (when (eshell-mode)
-    (add-hook 'eshell-mode-hook (lambda () (define-key company-active-map (kbd "RET") 'company-quit-and-enter)))
-    (add-hook 'eshell-mode-hook (lambda () (define-key company-active-map [return] 'company-quit-and-enter))))
+  (define-key company-active-map (kbd "RET") 'company-quit-and-enter)
+  (define-key company-active-map [return] 'company-quit-and-enter)
+  
+  (add-hook 'eshell-mode-hook (lambda () (define-key company-active-map (kbd "RET") 'company-eshell-quit-and-enter)))
+  (add-hook 'eshell-mode-hook (lambda () (define-key company-active-map [return] 'company-eshell-quit-and-enter)))
   )
 
 
 ;;----------------------------------------------;;
 ;;                 ESHELL CONFIG                ;;
 ;;----------------------------------------------;;
-
+;; (eval-after-load "eshell" '(progn
+;; 			     (define-key company-active-map (kbd "RET") 'company-eshell-quit-and-enter)
+;; 			     (define-key company-active-map [return] 'company-eshell-quit-and-enter)
+;; 			     ) )
 ;;----------------------------------------------;;
 ;;               ORG-MODE CONFIG                ;;
 ;;----------------------------------------------;;
