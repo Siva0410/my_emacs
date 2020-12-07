@@ -49,6 +49,8 @@
   (package-install 'browse-kill-ring))
 (unless (package-installed-p 'company-jedi)
   (package-install 'company-jedi))
+(unless (package-installed-p 'atomic-chrome)
+  (package-install 'atomic-chrome))
 
 ;;----------------------------------------------;;
 ;;                FLAME CONFIG                  ;;
@@ -182,7 +184,7 @@
     ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
  '(package-selected-packages
    (quote
-    (company-jedi browse-kill-ring counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
+    (atomic-chrome company-jedi browse-kill-ring counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -256,6 +258,8 @@
   )
 
 
+;; atomic chrome
+(atomic-chrome-start-server)
 ;;----------------------------------------------;;
 ;;                 ESHELL CONFIG                ;;
 ;;----------------------------------------------;;
