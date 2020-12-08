@@ -53,6 +53,8 @@
   (package-install 'atomic-chrome))
 (unless (package-installed-p 'peep-dired)
   (package-install 'peep-dired))
+(unless (package-installed-p 'highlight-indent-guides)
+  (package-install 'highlight-indent-guides))
 
 ;;----------------------------------------------;;
 ;;                FLAME CONFIG                  ;;
@@ -157,7 +159,9 @@
 ;;----------------------------------------------;;
 ;;                 CODE CONFIG                  ;;
 ;;----------------------------------------------;;
-
+;; highlight indent
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+(setq highlight-indent-guides-method 'character)
 ;; ivy設定
 (require 'ivy)
 (ivy-mode 1)
@@ -186,7 +190,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (peep-dired atomic-chrome company-jedi browse-kill-ring counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
+    (highlight-indent-guides peep-dired atomic-chrome company-jedi browse-kill-ring counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
