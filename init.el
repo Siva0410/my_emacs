@@ -51,6 +51,8 @@
   (package-install 'company-jedi))
 (unless (package-installed-p 'atomic-chrome)
   (package-install 'atomic-chrome))
+(unless (package-installed-p 'peep-dired)
+  (package-install 'peep-dired))
 
 ;;----------------------------------------------;;
 ;;                FLAME CONFIG                  ;;
@@ -181,7 +183,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (atomic-chrome company-jedi browse-kill-ring counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
+    (peep-dired atomic-chrome company-jedi browse-kill-ring counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -275,8 +277,25 @@
 ;;               DIRED-MODE CONFIG              ;;
 ;;----------------------------------------------;;
 
-(eval-after-load "dired" '(progn
-  (define-key dired-mode-map (kbd "C-t") 'other-window-or-split) ))
+;; (eval-after-load "dired" '(progn
+;; 			    (define-key dired-mode-map (kbd "C-t") 'other-window-or-split)))
+
+(require 'dired)
+(define-key dired-mode-map (kbd "C-t") 'other-window-or-split)
+
+(require 'peep-dired)
+;; peep-dired conf
+(define-key dired-mode-map (kbd "P") 'peep-dired)
+(define-key peep-dired-mode-map (kbd "P") 'peep-dired)
+
+;; cleanup dired buffer
+(setq peep-dired-cleanup-eagerly nil)
+
+;; enable dired mode on directory
+(setq peep-dired-enable-on-directories t) 
+
+;; ignore files
+(setq peep-dired-ignored-extensions '("mkv" "iso" "mp4"))
 
 ;;----------------------------------------------;;
 ;;               KILL RING CONFIG               ;;
