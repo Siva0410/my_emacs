@@ -151,6 +151,9 @@
 (global-set-key (kbd "M-r") 'switch-to-next-buffer)
 ;; C-r switch prev buffer
 (global-set-key (kbd "C-r") 'switch-to-prev-buffer)
+
+;; jump current directory
+(global-set-key (kbd "C-x C-d") 'dired-jump)
 ;;----------------------------------------------;;
 ;;                 CODE CONFIG                  ;;
 ;;----------------------------------------------;;
@@ -282,6 +285,12 @@
 
 (require 'dired)
 (define-key dired-mode-map (kbd "C-t") 'other-window-or-split)
+
+;; set the other dired buf as default dist
+(setq dired-dwim-target t)
+
+;; recursive copy
+(setq dired-recursive-copies 'always)
 
 (require 'peep-dired)
 ;; peep-dired conf
