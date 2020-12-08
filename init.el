@@ -1,17 +1,4 @@
-;; auto-install 
-;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
-;; (require 'auto-install)
-;; (auto-install-update-emacswiki-package-name t)
-;; (auto-install-compatibility-setup)
-
-;;MELPA
-;; (require 'package)
-;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-;; (package-initialize) 
-
 (require 'package)
-
 ;; package-archivesを上書き
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
@@ -22,39 +9,16 @@
 
 (unless package-archive-contents (package-refresh-contents))
 
-;; 以下、追加するパッケージ
-(unless (package-installed-p 'atom-one-dark-theme)
-  (package-install 'atom-one-dark-theme))
-(unless (package-installed-p 'powerline)
-  (package-install 'powerline))
-(unless (package-installed-p 'smart-mode-line)
-  (package-install 'smart-mode-line))
-(unless (package-installed-p 'nyan-mode)
-  (package-install 'nyan-mode))
-(unless (package-installed-p 'rainbow-delimiters)
-  (package-install 'rainbow-delimiters))
-(unless (package-installed-p 'counsel)
-  (package-install 'counsel))
-(unless (package-installed-p 'sequential-command)
-  (package-install 'sequential-command))
-(unless (package-installed-p 'elpy)
-  (package-install 'elpy))
-(unless (package-installed-p 'smartrep)
-  (package-install 'smartrep))
-(unless (package-installed-p 'magit)
-  (package-install 'magit))
-(unless (package-installed-p 'ox-hugo)
-  (package-install 'ox-hugo))
-(unless (package-installed-p 'browse-kill-ring)
-  (package-install 'browse-kill-ring))
-(unless (package-installed-p 'company-jedi)
-  (package-install 'company-jedi))
-(unless (package-installed-p 'atomic-chrome)
-  (package-install 'atomic-chrome))
-(unless (package-installed-p 'peep-dired)
-  (package-install 'peep-dired))
-(unless (package-installed-p 'highlight-indent-guides)
-  (package-install 'highlight-indent-guides))
+;; M-x package-install-select-packages
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+;; auto-install 
+;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
+;; (require 'auto-install)
+;; (auto-install-update-emacswiki-package-name t)
+;; (auto-install-compatibility-setup)
 
 ;;----------------------------------------------;;
 ;;                FLAME CONFIG                  ;;
@@ -183,20 +147,6 @@
 
 ;;Rainbow-delimiters
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (highlight-indent-guides peep-dired atomic-chrome company-jedi browse-kill-ring counsel magit elpygen smartrep helm-flycheck flycheck elpy smart-mode-line nyan-mode rainbow-delimiters))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ;;company-mode
 (require 'company)
@@ -283,10 +233,6 @@
 ;;----------------------------------------------;;
 ;;               DIRED-MODE CONFIG              ;;
 ;;----------------------------------------------;;
-
-;; (eval-after-load "dired" '(progn
-;; 			    (define-key dired-mode-map (kbd "C-t") 'other-window-or-split)))
-
 (require 'dired)
 (define-key dired-mode-map (kbd "C-t") 'other-window-or-split)
 
