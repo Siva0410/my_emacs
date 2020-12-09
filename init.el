@@ -79,14 +79,7 @@
 ;; "yes or no" の選択を "y or n" にする
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; bufferの最後でカーソルを動かそうとしても音をならなくする
-(defun next-line (arg)
-  (interactive "p")
-  (condition-case nil
-      (line-move arg)
-    (end-of-buffer)))
-
-;; エラー音をならなくする
+;; delete beap
 (setq ring-bell-function 'ignore)
 
 ;;----------------------------------------------;;
@@ -100,6 +93,7 @@
 (global-set-key "\C-h" 'delete-backward-char)
 
 ;;magit
+(require 'magit)
 (global-set-key (kbd "C-x g") 'magit-status)
 (define-key magit-mode-map (kbd "C-p") 'magit-section-backward)
 (define-key magit-mode-map (kbd "C-n") 'magit-section-forward)
@@ -142,6 +136,11 @@
 
 ;; C-S-s
 (global-set-key (kbd "C-S-s") 'counsel-imenu)
+
+;; C-x C-u upcase-region
+(put 'upcase-region 'disabled nil)
+;; C-x C-l downcase-region
+(put 'downcase-region 'disabled nil)
 ;;----------------------------------------------;;
 ;;                 CODE CONFIG                  ;;
 ;;----------------------------------------------;;
@@ -261,8 +260,13 @@
   )
 
 
-;; atomic chrome
-;; (atomic-chrome-start-server)
+;; Multiple Cursors
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
 ;;----------------------------------------------;;
 ;;                 ESHELL CONFIG                ;;
 ;;----------------------------------------------;;
