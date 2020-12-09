@@ -111,7 +111,23 @@
 (global-set-key (kbd "C-t") 'other-window-or-split)
 
 ;; C-; Comment out
-(global-set-key (kbd "C-;") 'comment-dwim) 
+(global-set-key (kbd "C-;") 'comment-dwim)
+
+(defun insert-single-quote ()
+  (interactive)
+  (insert "'")
+  (insert "'")
+  (backward-char))
+
+(defun insert-double-quote ()
+  (interactive)
+  (insert "\"")
+  (insert "\"")
+  (backward-char))
+
+;; C-' C-" insert '' ""
+(global-set-key (kbd "C-'") 'insert-single-quote)
+(global-set-key (kbd "C-\"") 'insert-double-quote)
 
 ;; M-r switch next buffer
 (global-set-key (kbd "M-r") 'switch-to-next-buffer)
@@ -127,13 +143,28 @@
 ;;                 CODE CONFIG                  ;;
 ;;----------------------------------------------;;
 
-;; lsp-mode
-;; (package-install 'lsp-mode)
-;; (package-install 'lsp-ui)
-;; (package-install 'company-lsp)
-(add-hook 'lsp-mode-hook 'lsp-ui-mode)
-(add-hook 'python-mode-hook #'lsp)
+;; flycheck
+(global-flycheck-mode)
+;; (add-hook 'python-mode-hook 'flycheck-mode)
+;; (add-hook 'c++-mode-hook 'flycheck-mode)
+;; (add-hook 'c-mode-hook 'flycheck-mode)
 
+;; lsp-mode
+(add-hook 'lsp-mode-hook 'lsp-ui-mode)
+(add-hook 'lsp-mode-hook 'yas-minor-mode)
+(add-hook 'python-mode-hook #'lsp)
+(add-hook 'c-mode-hook #'lsp)
+(add-hook 'c++-mode-hook #'lsp)
+(setq lsp-enable-snippet t)
+(setq lsp-prefer-flymake nil)
+(setq lsp-prefer-capf t)
+
+(global-set-key (kbd "M-.") 'xref-find-definitions)
+(global-set-key (kbd "M-/") 'xref-find-references)
+(global-set-key (kbd "M-,") 'xref-pop-marker-stack)
+
+(require 'ccls)
+(setq ccls-executable "/home/shiba/.emacs.d/ccls/Release/ccls")
 
 ;; highlight indent
 (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
@@ -233,7 +264,7 @@
 ;;                 ESHELL CONFIG                ;;
 ;;----------------------------------------------;;
 (setq shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell))))
-(global-set-key (kbd "C-'") 'shell-pop)
+(global-set-key (kbd "C-]") 'shell-pop)
 
 ;;----------------------------------------------;;
 ;;               ORG-MODE CONFIG                ;;
