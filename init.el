@@ -222,10 +222,9 @@
 ;;----------------------------------------------;;
 ;;                 ESHELL CONFIG                ;;
 ;;----------------------------------------------;;
-;; (eval-after-load "eshell" '(progn
-;; 			     (define-key company-active-map (kbd "RET") 'company-eshell-quit-and-enter)
-;; 			     (define-key company-active-map [return] 'company-eshell-quit-and-enter)
-;; 			     ) )
+(setq shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell))))
+(global-set-key (kbd "C-'") 'shell-pop)
+
 ;;----------------------------------------------;;
 ;;               ORG-MODE CONFIG                ;;
 ;;----------------------------------------------;;
@@ -270,6 +269,7 @@
 ;;----------------------------------------------;;
 ;;                    Mew CONFIG                ;;
 ;;----------------------------------------------;;
+
 (autoload 'mew "mew" nil t)
 (autoload 'mew-send "mew" nil t)
 
@@ -287,6 +287,7 @@
       'mew-draft-send-message
       'mew-draft-kill
       'mew-send-hook))
+
 ;;----------------------------------------------;;
 ;;                 PYTHON CONFIG                ;;
 ;;----------------------------------------------;;
