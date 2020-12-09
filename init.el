@@ -101,6 +101,9 @@
 
 ;;magit
 (global-set-key (kbd "C-x g") 'magit-status)
+(define-key magit-mode-map (kbd "C-p") 'magit-section-backward)
+(define-key magit-mode-map (kbd "C-n") 'magit-section-forward)
+
 
 ;;C-t other window
 (defun other-window-or-split ()
