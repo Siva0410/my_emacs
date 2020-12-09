@@ -120,6 +120,9 @@
 
 ;; jump current directory
 (global-set-key (kbd "C-x C-d") 'dired-jump)
+
+;; C-S-s
+(global-set-key (kbd "C-S-s") 'counsel-imenu)
 ;;----------------------------------------------;;
 ;;                 CODE CONFIG                  ;;
 ;;----------------------------------------------;;
@@ -263,6 +266,27 @@
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-x y") 'browse-kill-ring)
 (browse-kill-ring-default-keybindings)
+
+;;----------------------------------------------;;
+;;                    Mew CONFIG                ;;
+;;----------------------------------------------;;
+(autoload 'mew "mew" nil t)
+(autoload 'mew-send "mew" nil t)
+
+;; Optional setup (Read Mail menu):
+(setq read-mail-command 'mew)
+
+;; Optional setup (e.g. C-xm for sending a message):
+(autoload 'mew-user-agent-compose "mew" nil t)
+(if (boundp 'mail-user-agent)
+    (setq mail-user-agent 'mew-user-agent))
+(if (fboundp 'define-mail-user-agent)
+    (define-mail-user-agent
+      'mew-user-agent
+      'mew-user-agent-compose
+      'mew-draft-send-message
+      'mew-draft-kill
+      'mew-send-hook))
 ;;----------------------------------------------;;
 ;;                 PYTHON CONFIG                ;;
 ;;----------------------------------------------;;
