@@ -215,7 +215,7 @@
 
 
 ;; atomic chrome
-(atomic-chrome-start-server)
+;; (atomic-chrome-start-server)
 ;;----------------------------------------------;;
 ;;                 ESHELL CONFIG                ;;
 ;;----------------------------------------------;;
