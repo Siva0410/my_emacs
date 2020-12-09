@@ -126,6 +126,15 @@
 ;;----------------------------------------------;;
 ;;                 CODE CONFIG                  ;;
 ;;----------------------------------------------;;
+
+;; lsp-mode
+;; (package-install 'lsp-mode)
+;; (package-install 'lsp-ui)
+;; (package-install 'company-lsp)
+(add-hook 'lsp-mode-hook 'lsp-ui-mode)
+(add-hook 'python-mode-hook #'lsp)
+
+
 ;; highlight indent
 (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 (setq highlight-indent-guides-method 'character)
@@ -154,6 +163,7 @@
 ;;company-mode
 (require 'company)
 (global-company-mode) ; 全バッファで有効にする
+;; (push 'company-lsp company-backends)
 
 (with-eval-after-load 'company
   (setq company-auto-expand nil) ;; 1個目を自動的に補完
@@ -294,12 +304,12 @@
 
 ;;elpy enable
 (elpy-enable)
-(setq elpy-rpc-virtualenv-path 'current)
-(setq elpy-rpc-python-command "python3")
-;;use flycheck
-(when (require 'flyckeck nil t)
-  (remove-hook 'elpy-modules 'elpy-module-flymake)
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
+;; (setq elpy-rpc-virtualenv-path 'current)
+;; (setq elpy-rpc-python-command "python3")
+;; ;;use flycheck
+;; (when (require 'flyckeck nil t)
+;;   (remove-hook 'elpy-modules 'elpy-module-flymake)
+;;   (add-hook 'elpy-mode-hook 'flycheck-mode))
 
 ;;jedi
 ;; (require 'jedi-core)
@@ -308,8 +318,8 @@
 ;; (add-hook 'python-mode-hook 'jedi:setup)
 ;; (add-to-list 'company-backends 'company-jedi) ; backendに追加
 
-(define-key elpy-mode-map (kbd "C-c C-v") 'helm-flycheck)
-(require 'smartrep)   
-(smartrep-define-key elpy-mode-map "C-c"
-  '(("C-n" . flycheck-next-error)
-    ("C-p" . flycheck-previous-error)))
+;; (define-key elpy-mode-map (kbd "C-c C-v") 'helm-flycheck)
+;; (require 'smartrep)   
+;; (smartrep-define-key elpy-mode-map "C-c"
+;;   '(("C-n" . flycheck-next-error)
+;;     ("C-p" . flycheck-previous-error)))
