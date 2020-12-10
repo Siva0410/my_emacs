@@ -254,11 +254,9 @@
 
   (define-key company-active-map (kbd "RET") 'company-quit-and-enter)
   (define-key company-active-map [return] 'company-quit-and-enter)
-  
   (add-hook 'eshell-mode-hook (lambda () (define-key company-active-map (kbd "RET") 'company-eshell-quit-and-enter)))
   (add-hook 'eshell-mode-hook (lambda () (define-key company-active-map [return] 'company-eshell-quit-and-enter)))
   )
-
 
 ;; Multiple Cursors
 (require 'multiple-cursors)
@@ -266,6 +264,7 @@
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(define-key mc/keymap (kbd "<return>") nil)
 
 ;;----------------------------------------------;;
 ;;                 ESHELL CONFIG                ;;
@@ -322,6 +321,42 @@
 (browse-kill-ring-default-keybindings)
 
 ;;----------------------------------------------;;
+;;                   GDB CONFIG                 ;;
+;;----------------------------------------------;;
+;; gud-overlay-arrow-position nilでエラー
+(setq gud-tooltip-display
+      '((and gud-overlay-arrow-position
+	     (eq (tooltip-event-buffer gud-tooltip-event)
+		 (marker-buffer gud-overlay-arrow-position)))))
+
+;; gdb バッファの C-c C-c でプログラムを停止
+(setq gdb-gud-control-all-threads nil)
+
+;; input/output バッファ抑制
+(setq gdb-display-io-nopopup t)
+
+(defadvice gdb-display-buffer (around gdb-display-buffer)
+  (let (window)
+    (setq window ad-do-it)
+    (set-window-dedicated-p window nil)
+    window
+  ))
+(ad-activate 'gdb-display-buffer)
+
+;; gdb バッファの C-c C-c ではプログラムが停止しなかったので、修正
+(defun my-gud-stop ()
+  (interactive)
+  (comint-interrupt-subjob)
+  (gud-stop-subjob)
+  )
+
+;; 上記 my-gud-stop 関数を C-cC-c に登録する関数
+(defun my-gud-mode-func ()
+  (define-key (current-local-map) "\C-c\C-c" 'my-gud-stop)
+  )
+;; フックに登録
+(add-hook 'gud-mode-hook 'my-gud-mode-func)
+;;----------------------------------------------;;
 ;;                    Mew CONFIG                ;;
 ;;----------------------------------------------;;
 
@@ -349,8 +384,8 @@
 
 ;;elpy enable
 (elpy-enable)
-;; (setq elpy-rpc-virtualenv-path 'current)
-;; (setq elpy-rpc-python-command "python3")
+(setq elpy-rpc-virtualenv-path 'current)
+(setq elpy-rpc-python-command "python3")
 ;; ;;use flycheck
 ;; (when (require 'flyckeck nil t)
 ;;   (remove-hook 'elpy-modules 'elpy-module-flymake)
