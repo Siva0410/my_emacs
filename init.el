@@ -204,9 +204,13 @@
 (setq skk-use-jisx0201-input-method t)
 
 ;; cursors color setting
-(setq skk-cursor-jisx0201-color "yellow")
+(setq skk-cursor-hiragana-color "gold")
+(setq skk-cursor-katakana-color "chartreuse")
+(setq skk-cursor-jisx0208-latin-color "deeppink")
+(setq skk-cursor-jisx0201-color "darkorange")
 (setq skk-cursor-latin-color "skyblue")
-(setq skk-cursor-abbrev-color "purple")
+(setq skk-cursor-abbrev-color "violet")
+
 ;; ";"をsticky shiftに用いることにする
 (setq skk-sticky-key ";")
 
