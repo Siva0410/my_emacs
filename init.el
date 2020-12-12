@@ -184,19 +184,17 @@
 ;;----------------------------------------------;;
 ;;                  SKK CONFIG                  ;;
 ;;----------------------------------------------;;
+;; font conf
+(set-fontset-font t 'japanese-jisx0208 "TakaoGothic")
+(add-to-list 'face-font-rescale-alist '(".*Takao .*" . 1.0))
+
 (require 'skk)
-(global-set-key (kbd "C-x j") 'skk-mode) ; 良い感じに改行を自動入力してくれる機能
-;; (setq default-input-method "japanese-skk")         ; emacs上での日本語入力にskkを使う
-;; (require 'skk-study)
-;; (setq skk-server-prog "/usr/local/bin/google-ime-skk") ; google-ime-skkの場所
-;; (setq skk-server-inhibit-startup-server nil) ; 辞書サーバが起動していなかったときに Emacs からプロセスを立ち上げる
-;; (setq skk-server-host "localhost") ; サーバー機能を利用
-;; (setq skk-server-portnum 55100)     ; ポートはgoogle-ime-skk
-(setq skk-share-private-jisyo t)   ; 複数 skk 辞書を共有
+(global-set-key (kbd "C-x j") 'skk-mode)
+(setq skk-share-private-jisyo t) 
 
 (setq skk-jisyo-code 'utf-8)
 
-(setq skk-henkan-strict-okuri-precedence t) ; 送り仮名が厳密に正しい候補を優先して表示
+(setq skk-henkan-strict-okuri-precedence t)
 
 ;; 句読点変更
 (setq-default skk-kutouten-type 'en)
