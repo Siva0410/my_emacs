@@ -27,16 +27,16 @@
 ;;theme config
 (load-theme 'atom-one-dark t)
 
-;; ウィンドウを透明にする
-;; アクティブウィンドウ／非アクティブウィンドウ（alphaの値で透明度を指定）
+;; ウィンドウを透明にする
+;; アクティブウィンドウ／非アクティブウィンドウ（alphaの値で透明度を指定）
 (add-to-list 'default-frame-alist '(alpha . (0.95 0.95)))
 
 ;;delete startup message
 (setq inhibit-startup-message t)
-;;scratch の初期メッセージを消す
+;;scratch の初期メッセージを消す
 (setq initial-scratch-message nil)
 
-;;ツールバー不要
+;;ツールバー不要
 (tool-bar-mode 0)
 
 ;;delete Menu bar 
@@ -69,11 +69,16 @@
 ;;----------------------------------------------;;
 ;;               SYSTEM CONFIG                  ;;
 ;;----------------------------------------------;;
+;; (set-language-environment "Japanese")
+;; (set-default-coding-systems 'utf-8)
+;; (set-terminal-coding-system 'utf-8)
+;; (set-keyboard-coding-system 'utf-8)
+;; (set-buffer-file-coding-system 'utf-8)
 
-;; バックアップファイルを作らない
+;; バックアップファイルを作らない
 (setq make-backup-files nil)
 
-;; オートセーブファイルを作らない
+;; オートセーブファイルを作らない
 (setq auto-save-default nil)
 
 ;; "yes or no" の選択を "y or n" にする
@@ -175,6 +180,63 @@
     ;; TKK='427110.1469889687'
   (list 427110 1469889687))
 
+
+;;----------------------------------------------;;
+;;                  SKK CONFIG                  ;;
+;;----------------------------------------------;;
+(require 'skk)
+(global-set-key (kbd "C-x j") 'skk-mode) ; 良い感じに改行を自動入力してくれる機能
+;; (setq default-input-method "japanese-skk")         ; emacs上での日本語入力にskkを使う
+;; (require 'skk-study)
+;; (setq skk-server-prog "/usr/local/bin/google-ime-skk") ; google-ime-skkの場所
+;; (setq skk-server-inhibit-startup-server nil) ; 辞書サーバが起動していなかったときに Emacs からプロセスを立ち上げる
+;; (setq skk-server-host "localhost") ; サーバー機能を利用
+;; (setq skk-server-portnum 55100)     ; ポートはgoogle-ime-skk
+(setq skk-share-private-jisyo t)   ; 複数 skk 辞書を共有
+
+(setq skk-jisyo-code 'utf-8)
+
+(setq skk-henkan-strict-okuri-precedence t) ; 送り仮名が厳密に正しい候補を優先して表示
+
+;; 句読点変更
+(setq-default skk-kutouten-type 'en)
+;; 半角カナ
+(setq skk-use-jisx0201-input-method t)
+
+;; cursors color setting
+(setq skk-cursor-jisx0201-color "yellow")
+(setq skk-cursor-latin-color "skyblue")
+(setq skk-cursor-abbrev-color "purple")
+;; ";"をsticky shiftに用いることにする
+(setq skk-sticky-key ";")
+
+
+;; 候補表示
+;; (setq skk-show-inline t)   ; 変換候補の表示位置
+;; (setq skk-show-tooltip t) ; 変換候補の表示位置
+;; (setq skk-show-candidates-always-pop-to-buffer t) ; 変換候補の表示位置
+;; (setq skk-henkan-number-to-display-candidates 2) ; 候補表示件数を2列に
+
+;; 動的候補表示
+(setq skk-dcomp-activate t) ; 動的補完
+(setq skk-dcomp-multiple-activate t) ; 動的補完の複数候補表示
+(setq skk-dcomp-multiple-rows 10) ; 動的補完の候補表示件数
+
+;; 動的補完の複数表示群のフェイス
+(set-face-foreground 'skk-dcomp-multiple-face "Black")
+(set-face-background 'skk-dcomp-multiple-face "LightGoldenrodYellow")
+(set-face-bold 'skk-dcomp-multiple-face nil)
+;; 動的補完の複数表示郡の補完部分のフェイス
+(set-face-foreground 'skk-dcomp-multiple-trailing-face "dim gray")
+(set-face-bold 'skk-dcomp-multiple-trailing-face nil)
+;; 動的補完の複数表示郡の選択対象のフェイス
+(set-face-foreground 'skk-dcomp-multiple-selected-face "White")
+(set-face-background 'skk-dcomp-multiple-selected-face "LightGoldenrod4")
+(set-face-bold 'skk-dcomp-multiple-selected-face nil)
+;; 動的補完時にC-nで次の補完へ
+;; (define-key skk-j-mode-map (kbd "C-n") 'skk-completion-wrapper) 
+
+
 ;;----------------------------------------------;;
 ;;                 CODE CONFIG                  ;;
 ;;----------------------------------------------;;
@@ -210,7 +272,7 @@
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
 (setq enable-recursive-minibuffers t)
-(setq ivy-height 30) ;; minibufferのサイズを拡大！（重要）
+(setq ivy-height 30) ;; minibufferのサイズを拡大！（重要）
 (setq ivy-extra-directories nil)
 (setq ivy-re-builders-alist
       '((t . ivy--regex-plus)))
@@ -222,33 +284,33 @@
 
 
 (global-set-key "\C-s" 'swiper)
-(setq swiper-include-line-number-in-search t) ;; line-numberでも検索可能
+(setq swiper-include-line-number-in-search t) ;; line-numberでも検索可能
 
 ;;Rainbow-delimiters
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;;company-mode
 (require 'company)
-(global-company-mode) ; 全バッファで有効にする
+(global-company-mode) ; 全バッファで有効にする
 ;; (push 'company-lsp company-backends)
 
 (with-eval-after-load 'company
   (setq company-auto-expand nil) ;; 1個目を自動的に補完
   (setq company-transformers '(company-sort-by-backend-importance)) ;; ソート順
-  (setq company-idle-delay 0) ; 遅延なしにすぐ表示
-  (setq company-minimum-prefix-length 2) ; デフォルトは4
+  (setq company-idle-delay 0) ; 遅延なしにすぐ表示
+  (setq company-minimum-prefix-length 2) ; デフォルトは4
   (setq company-selection-wrap-around t) ; 候補の最後の次は先頭に戻る
   (setq completion-ignore-case t)
   (setq company-dabbrev-downcase nil)
-  (setq company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")    ; -や_などを含む語句も補完
+  (setq company-dabbrev-char-regexp "\\(\\sw\\|\\s_\\|_\\|-\\)")    ; -や_などを含む語句も補完
   (global-set-key (kbd "C-M-i") 'company-complete)
-  ;; C-n, C-pで補完候補を次/前の候補を選択
+  ;; C-n, C-pで補完候補を次/前の候補を選択
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
-  (define-key company-active-map [tab] 'company-complete-selection) ;; TABで候補を設定
-  (define-key company-active-map (kbd "C-i") 'company-complete-selection) ;; C-iで候補を設定
-  (define-key company-active-map (kbd "C-h") nil) ;; C-hはバックスペース割当のため無効化
-  (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer) ;; ドキュメント表示はC-Shift-h
+  (define-key company-active-map [tab] 'company-complete-selection) ;; TABで候補を設定
+  (define-key company-active-map (kbd "C-i") 'company-complete-selection) ;; C-iで候補を設定
+  (define-key company-active-map (kbd "C-h") nil) ;; C-hはバックスペース割当のため無効化
+  (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer) ;; ドキュメント表示はC-Shift-h
   (define-key company-active-map (kbd "C-s") 'company-filter-candidates)
 
   (defun company-insert-candidate2 (candidate)
@@ -270,12 +332,12 @@
 	  (company-complete-selection)
 	(company-insert-candidate2 company-common))))
 
-  ;; TABで共通を補完 or next
+  ;; TABで共通を補完 or next
   (define-key company-active-map [tab] 'company-complete-common2)
   (define-key company-active-map [backtab] 'company-select-previous) 
 
 
-  ;; C-m or Enter で候補無視して改行(要検討)
+  ;; C-m or Enter で候補無視して改行(要検討)
   (defun company-quit-and-enter ()
     (interactive)
     (company-abort)
@@ -357,16 +419,16 @@
 ;;----------------------------------------------;;
 ;;                   GDB CONFIG                 ;;
 ;;----------------------------------------------;;
-;; gud-overlay-arrow-position nilでエラー
+;; gud-overlay-arrow-position nilでエラー
 (setq gud-tooltip-display
       '((and gud-overlay-arrow-position
 	     (eq (tooltip-event-buffer gud-tooltip-event)
 		 (marker-buffer gud-overlay-arrow-position)))))
 
-;; gdb バッファの C-c C-c でプログラムを停止
+;; gdb バッファの C-c C-c でプログラムを停止
 (setq gdb-gud-control-all-threads nil)
 
-;; input/output バッファ抑制
+;; input/output バッファ抑制
 (setq gdb-display-io-nopopup t)
 
 (defadvice gdb-display-buffer (around gdb-display-buffer)
@@ -377,7 +439,7 @@
   ))
 (ad-activate 'gdb-display-buffer)
 
-;; gdb バッファの C-c C-c ではプログラムが停止しなかったので、修正
+;; gdb バッファの C-c C-c ではプログラムが停止しなかったので、修正
 (defun my-gud-stop ()
   (interactive)
   (comint-interrupt-subjob)
