@@ -202,6 +202,8 @@
 (setq skk-use-jisx0201-input-method t)
 
 ;; cursors color setting
+(set-cursor-color "#ffffff")
+
 (setq skk-cursor-hiragana-color "gold")
 (setq skk-cursor-katakana-color "chartreuse")
 (setq skk-cursor-jisx0208-latin-color "deeppink")
