@@ -10,11 +10,13 @@ emacsを公式サイトからダウンロードして解凍
 
 emacsのビルド
 #+BEGIN_SRC bash
-  $cd /usr/local/src/emacs-27.2
-  $./configure
-  $sudo make
-  $sudo make install
-  $sudo cp emacs /usr/loca/bin
+    $sudo apt install build-essential ncurses-dev libgtk-dev \
+	  libxpm-dev libjpeg-dev libgif-dev libtiff-dev libgnutls28-dev
+    $cd /usr/local/src/emacs-27.2
+    $./configure
+    $sudo make
+    $sudo make install
+    $sudo cp emacs /usr/local/bin
 #+END_SRC
 
 emacsのPATHの追加
