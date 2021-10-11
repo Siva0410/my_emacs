@@ -1,0 +1,30 @@
+* emacsの設定
+
+** インストール
+emacsを公式サイトからダウンロードして解凍
+#+BEGIN_SRC bash
+  $wget -P /tmp/ http://ftp.jaist.ac.jp/pub/GNU/emacs/emacs-27.2.tar.gz
+  $tar xvf emacs-27.2.tar.gz -C /usr/local/src/
+  $rm /tmp/emacs-27.2.tar.gz
+#+END_SRC
+
+emacsのビルド
+#+BEGIN_SRC bash
+  $cd /usr/local/src/emacs-27.2
+  $./configure
+  $sudo make
+  $sudo make install
+  $sudo cp emacs /usr/loca/bin
+#+END_SRC
+
+emacsのPATHの追加
+.bashrc内に以下のコードを追加
+#+BEGIN_SRC
+export PATH=$PATH:/usr/local/bin
+#+END_SRC
+
+** emacsのパッケージのインストール
+#+BEGIN_EXAMPLE
+M-x package-install-selected-packages
+#+END_EXAMPLE
+
