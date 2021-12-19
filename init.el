@@ -53,8 +53,8 @@
   (global-display-line-numbers-mode)
   (add-to-list 'default-frame-alist
 	       '(alpha 0.95 0.95))
-  :setq ((inhibit-startup-message . t)
-         ((initial-scratch-message))))
+  :custom ((inhibit-startup-message . t)
+           ((initial-scratch-message))))
 
 
 (leaf rainbow-delimiters
@@ -64,7 +64,7 @@
 (leaf prog-mode
   :doc "highlight indent"
   :hook ((prog-mode-hook . highlight-indent-guides-mode))
-  :setq ((highlight-indent-guides-method quote character)))
+  :custom ((highlight-indent-guides-method quote character)))
 
 
 (leaf modeline-conf
@@ -78,9 +78,9 @@
   (line-number-mode t) 
 
   (leaf smartmodeline
-    :setq ((sml/no-confirm-load-theme . t)
-	   (sml/theme quote dark)
-	   (sml/shorten-directory . -1))
+    :custom ((sml/no-confirm-load-theme . t)
+	     (sml/theme quote dark)
+	     (sml/shorten-directory . -1))
     :config
     (sml/setup))
 
@@ -92,9 +92,9 @@
 
 (leaf system-conf
   :doc "System Config"
-  :setq ((make-backup-files)
-	 (auto-save-default)
-	 (ring-bell-function quote ignore))
+  :custom ((make-backup-files)
+	   (auto-save-default)
+	   (ring-bell-function quote ignore))
   :config
   (fset 'yes-or-no-p 'y-or-n-p))
 
@@ -123,8 +123,8 @@
   :bind ((dired-mode-map
 	  ("C-t" . other-window-or-split)))
   :require dired
-  :setq ((dired-dwim-target . t)
-	 (dired-recursive-copies quote always)))
+  :custom ((dired-dwim-target . t)
+	   (dired-recursive-copies quote always)))
 
 (leaf peep-dired
   :bind ((dired-mode-map
@@ -139,10 +139,10 @@
 	  ("C-p" . dired-previous-line))
 	 (peep-dired-mode-map
 	  ("C-n" . dired-next-line)))
-  :setq ((peep-dired-cleanup-eagerly)
-	 (peep-dired-enable-on-directories . t)
-	 (peep-dired-ignored-extensions quote
-					("mkv" "iso" "mp4")))
+  :custom ((peep-dired-cleanup-eagerly)
+	   (peep-dired-enable-on-directories . t)
+	   (peep-dired-ignored-extensions quote
+					  ("mkv" "iso" "mp4")))
   :require peep-dired)
 
 
@@ -189,7 +189,7 @@
 					   '("./" "../"))))
   (leaf ivy-swiper
     :bind (("C-s" . swiper))
-    :setq ((swiper-include-line-number-in-search . t))))
+    :custom ((swiper-include-line-number-in-search . t))))
 
 
 (leaf company
@@ -266,15 +266,15 @@
 	   (company-active-map
 	    ([return]
 	     . company-quit-and-enter)))
-    :setq ((company-auto-expand)
-	   (company-transformers quote
-			         (company-sort-by-backend-importance))
-	   (company-idle-delay . 0)
-	   (company-minimum-prefix-length . 2)
-	   (company-selection-wrap-around . t)
-	   (completion-ignore-case . t)
-	   (company-dabbrev-downcase)
-	   (company-dabbrev-char-regexp . "\\(\\sw\\|\\s_\\|_\\|-\\)"))
+    :custom ((company-auto-expand)
+	     (company-transformers quote
+			           (company-sort-by-backend-importance))
+	     (company-idle-delay . 0)
+	     (company-minimum-prefix-length . 2)
+	     (company-selection-wrap-around . t)
+	     (completion-ignore-case . t)
+	     (company-dabbrev-downcase)
+	     (company-dabbrev-char-regexp . "\\(\\sw\\|\\s_\\|_\\|-\\)"))
     :config
     (add-hook 'eshell-mode-hook
 	      (lambda nil
