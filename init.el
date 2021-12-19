@@ -30,6 +30,11 @@
     ;; initialize leaf-keywords.el
     (leaf-keywords-init)))
 
+(leaf cus-edit
+  :doc "tools for customizing Emacs and Lisp packages"
+  :tag "builtin" "faces" "help"
+  :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
+
 ;;---------------------------------------------------------------------------------------
 (leaf leaf
   :config
@@ -304,7 +309,37 @@
   :require ox-hugo)
 
 
-;; (leaf golang
+(leaf golang-lsp
+  :preface
+  (defun lsp-go-install-save-hooks nil
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+  :hook ((go-mode-hook . lsp-deferred)
+	 (go-mode-hook . lsp-go-install-save-hooks))
+  :require lsp-mode)
+
+(leaf golang
+  :preface
+  (defun lsp-go-install-save-hooks nil
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+  :config
+  (leaf go-mode
+    :ensure t
+    :mode ("\\.go\\'")
+    :hook ((go-mode-hook . lsp-go-install-save-hooks)))
+
+  (leaf lsp-mode
+    :ensure t
+    :commands lsp-deferred lsp
+    :hook ((go-mode-hook . lsp-deferred)))
+
+  (leaf lsp-ui
+    :ensure t
+    :commands lsp-ui-mode))
+  
 ;; ;;----------------------------------------------;;
 ;; ;;                  SKK CONFIG                  ;;
 ;; ;;----------------------------------------------;;
