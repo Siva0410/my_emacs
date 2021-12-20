@@ -179,6 +179,31 @@
   :require magit)
 
 
+(leaf docker
+  :bind ("C-x v" . docker)
+  ;;        (magit-mode-map
+  ;;         ("C-p" . magit-section-backward))
+  ;;        (magit-mode-map
+  ;;         ("C-n" . magit-section-forward)))
+  :ensure t
+  :require docker)
+
+
+(leaf dockerfile-mode
+  :ensure t
+  :mode (("Dockerfile\\'" . dockerfile-mode)))
+  ;; :require dockerfile-mode)
+
+(leaf docker-compose-mode
+  :ensure t
+  :require docker-compose-mode)
+
+(leaf docker-tramp
+  :ensure t
+  :require docker-tramp-compat
+  :config
+  (set-variable 'docker-tramp-use-names t))
+
 (leaf ivy
   :require ivy
   :custom ((ivy-use-virtual-buffers . t)
