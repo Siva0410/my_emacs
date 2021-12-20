@@ -35,7 +35,7 @@
   :tag "builtin" "faces" "help"
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
-;;---------------------------------------------------------------------------------------
+
 (leaf leaf
   :config
   (leaf leaf-convert :ensure t)
@@ -44,10 +44,13 @@
     :custom ((imenu-list-size . 30)
              (imenu-list-position . 'left))))
 
+
 (leaf macrostep
   :ensure t
   :bind (("C-c e" . macrostep-expand)))
 
+
+;;---------------------------------------------------------------------------------------
 
 (leaf flame-conf
   :doc "Flame Config"
@@ -66,6 +69,14 @@
   :doc "highlight parentheses"
   :hook ((prog-mode-hook . rainbow-delimiters-mode)))
 
+
+(leaf smartparens
+  :require smartparens-config
+  :setq-default ((sp-highlight-pair-overlay))
+  :config
+  (smartparens-global-mode t))
+
+
 (leaf prog-mode
   :doc "highlight indent"
   :hook ((prog-mode-hook . highlight-indent-guides-mode))
@@ -77,9 +88,7 @@
   :require powerline
   :config
   (powerline-default-theme)
-  :doc "display column number to modeline"
   (column-number-mode t)
-  :doc "display line number to modeline"
   (line-number-mode t) 
 
   (leaf smartmodeline
@@ -130,6 +139,7 @@
   :require dired
   :custom ((dired-dwim-target . t)
 	   (dired-recursive-copies quote always)))
+
 
 (leaf peep-dired
   :bind ((dired-mode-map
@@ -199,98 +209,84 @@
 
 (leaf company
   :require company
+  :preface
+  (defun company-insert-candidate2 (candidate)
+    (when (>
+	   (length candidate)
+	   0)
+      (setq candidate (substring-no-properties candidate))
+      (if (eq
+	   (company-call-backend 'ignore-case)
+	   'keep-prefix)
+	  (insert
+	   (company-strip-prefix candidate))
+	(if (equal company-prefix candidate)
+	    (company-select-next)
+	  (delete-region
+	   (-
+	    (point)
+	    (length company-prefix))
+	   (point))
+	  (insert candidate)))))
+
+  (defun company-complete-common2 nil
+    (interactive)
+    (when (company-manual-begin)
+      (if (and
+	   (not (cdr company-candidates))
+	   (equal company-common
+		  (car company-candidates)))
+	  (company-complete-selection)
+	(company-insert-candidate2 company-common))))
+
+  (defun company-quit-and-enter nil
+    (interactive)
+    (company-abort)
+    (newline))
+
+  (defun company-eshell-quit-and-enter nil
+    (interactive)
+    (company-abort)
+    (eshell-send-input))
+
+  :after t
+  :bind (("C-M-i" . company-complete)
+	 (company-active-map
+	  ("C-n" . company-select-next)
+	  ("C-p" . company-select-previous)
+	  ([tab]
+	   . company-complete-selection)
+	  ("C-i" . company-complete-selection)
+	  ("C-h")
+	  ("C-S-h" . company-show-doc-buffer)
+	  ("C-s" . company-filter-candidates)
+	  ([tab]
+	   . company-complete-common2)
+	  ([backtab]
+	   . company-select-previous)
+	  ("RET" . company-quit-and-enter)
+	  ([return]
+	   . company-quit-and-enter)))
+  :custom ((company-auto-expand)
+	   (company-transformers quote
+			         (company-sort-by-backend-importance))
+	   (company-idle-delay . 0)
+	   (company-minimum-prefix-length . 2)
+	   (company-selection-wrap-around . t)
+	   (completion-ignore-case . t)
+	   (company-dabbrev-downcase)
+	   (company-dabbrev-char-regexp . "\\(\\sw\\|\\s_\\|_\\|-\\)"))
   :config
-  (global-company-mode)
-
-  (leaf company-conf
-    :preface
-    (defun company-insert-candidate2 (candidate)
-      (when (>
-	     (length candidate)
-	     0)
-        (setq candidate (substring-no-properties candidate))
-        (if (eq
-	     (company-call-backend 'ignore-case)
-	     'keep-prefix)
-	    (insert
-	     (company-strip-prefix candidate))
-	  (if (equal company-prefix candidate)
-	      (company-select-next)
-	    (delete-region
-	     (-
-	      (point)
-	      (length company-prefix))
-	     (point))
-	    (insert candidate)))))
-
-    (defun company-complete-common2 nil
-      (interactive)
-      (when (company-manual-begin)
-        (if (and
-	     (not (cdr company-candidates))
-	     (equal company-common
-		    (car company-candidates)))
-	    (company-complete-selection)
-	  (company-insert-candidate2 company-common))))
-
-    (defun company-quit-and-enter nil
-      (interactive)
-      (company-abort)
-      (newline))
-
-    (defun company-eshell-quit-and-enter nil
-      (interactive)
-      (company-abort)
-      (eshell-send-input))
-
-    :after t
-    :bind (("C-M-i" . company-complete)
-	   (company-active-map
-	    ("C-n" . company-select-next))
-	   (company-active-map
-	    ("C-p" . company-select-previous))
-	   (company-active-map
-	    ([tab]
-	     . company-complete-selection))
-	   (company-active-map
-	    ("C-i" . company-complete-selection))
-	   (company-active-map
-	    ("C-h"))
-	   (company-active-map
-	    ("C-S-h" . company-show-doc-buffer))
-	   (company-active-map
-	    ("C-s" . company-filter-candidates))
-	   (company-active-map
-	    ([tab]
-	     . company-complete-common2))
-	   (company-active-map
-	    ([backtab]
-	     . company-select-previous))
-	   (company-active-map
-	    ("RET" . company-quit-and-enter))
-	   (company-active-map
-	    ([return]
-	     . company-quit-and-enter)))
-    :custom ((company-auto-expand)
-	     (company-transformers quote
-			           (company-sort-by-backend-importance))
-	     (company-idle-delay . 0)
-	     (company-minimum-prefix-length . 2)
-	     (company-selection-wrap-around . t)
-	     (completion-ignore-case . t)
-	     (company-dabbrev-downcase)
-	     (company-dabbrev-char-regexp . "\\(\\sw\\|\\s_\\|_\\|-\\)"))
-    :config
-    (add-hook 'eshell-mode-hook
-	      (lambda nil
-	        (define-key company-active-map
-		  (kbd "RET")
-		  'company-eshell-quit-and-enter)))
-    (add-hook 'eshell-mode-hook
-	      (lambda nil
-	        (define-key company-active-map
-		  [return]
-		  'company-eshell-quit-and-enter)))))
+  (add-hook 'eshell-mode-hook
+	    (lambda nil
+	      (define-key company-active-map
+		(kbd "RET")
+		'company-eshell-quit-and-enter)))
+  (add-hook 'eshell-mode-hook
+	    (lambda nil
+	      (define-key company-active-map
+		[return]
+		'company-eshell-quit-and-enter))))
 
 
 (leaf multiple-cursors
@@ -319,6 +315,7 @@
 	 (go-mode-hook . lsp-go-install-save-hooks))
   :require lsp-mode)
 
+
 (leaf golang
   :preface
   (defun lsp-go-install-save-hooks nil
@@ -334,10 +331,13 @@
   (leaf lsp-mode
     :ensure t
     :commands lsp-deferred lsp
-    :hook ((go-mode-hook . lsp-deferred)))
+    :hook ((go-mode-hook . lsp-deferred))
+    :setq (lsp-enable-snippet . nil))
+
 
   (leaf lsp-ui
     :ensure t
+    :custom (lsp-ui-doc-use-childframe . nil)
     :commands lsp-ui-mode))
   
 ;; ;;----------------------------------------------;;
