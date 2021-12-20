@@ -72,6 +72,7 @@
 
 (leaf smartparens
   :require smartparens-config
+  :ensure t
   :setq-default ((sp-highlight-pair-overlay))
   :config
   (smartparens-global-mode t))
@@ -331,15 +332,32 @@
   (leaf lsp-mode
     :ensure t
     :commands lsp-deferred lsp
-    :hook ((go-mode-hook . lsp-deferred))
-    :setq (lsp-enable-snippet . nil))
+    :hook ((go-mode-hook . lsp-deferred)
+           (lsp-mode-hook . yas-minor-mode))
+    :setq (lsp-enable-snippet . t))
 
 
   (leaf lsp-ui
     :ensure t
     :custom (lsp-ui-doc-use-childframe . nil)
     :commands lsp-ui-mode))
-  
+
+
+(leaf c-lsp
+  :require ccls
+  :setq ((ccls-executable . "/home/shiba/.emacs.d/ccls/Release/ccls")))
+
+(leaf lsp-ui
+  :hook ((lsp-mode-hook . lsp-ui-mode)
+	 (lsp-mode-hook . yas-minor-mode)))
+
+(leaf lsp-mode
+  :hook ((c-mode-hook . lsp)
+	 (c++-mode-hook . lsp))
+  :setq ((lsp-enable-snippet . t)
+	 (lsp-prefer-flymake)
+	 (lsp-prefer-capf . t)))
+
 ;; ;;----------------------------------------------;;
 ;; ;;                  SKK CONFIG                  ;;
 ;; ;;----------------------------------------------;;
@@ -411,22 +429,12 @@
 ;; ;; (add-hook 'c-mode-hook 'flycheck-mode)
 
 ;; ;; lsp-mode
-;; (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-;; (add-hook 'lsp-mode-hook 'yas-minor-mode)
+
 ;; (add-hook 'python-mode-hook #'lsp)
-;; (add-hook 'c-mode-hook #'lsp)
-;; (add-hook 'c++-mode-hook #'lsp)
-;; (setq lsp-enable-snippet t)
-;; (setq lsp-prefer-flymake nil)
-;; (setq lsp-prefer-capf t)
 
 ;; (global-set-key (kbd "M-.") 'xref-find-definitions)
 ;; (global-set-key (kbd "M-/") 'xref-find-references)
 ;; (global-set-key (kbd "M-,") 'xref-pop-marker-stack)
-
-;; (require 'ccls)
-;; (setq ccls-executable "/home/shiba/.emacs.d/ccls/Release/ccls")
-
 
 ;;---------------------------------------------------------------------------------------
 (provide 'init)

@@ -13,7 +13,7 @@
      ("melpa" . "https://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(smartparens lsp-ui lsp-mode go-mode macrostep leaf-tree leaf-convert blackout el-get hydra leaf-keywords)))
+   '(lsp-ui lsp-mode go-mode macrostep leaf-tree leaf-convert blackout el-get hydra leaf-keywords)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
