@@ -51,6 +51,74 @@
 
 
 ;;---------------------------------------------------------------------------------------
+;;----------------------------------------------;;
+;;                  vterm CONFIG                ;;
+;;----------------------------------------------;;
+(leaf vterm
+  ;; requirements: brew install cmake libvterm libtool
+  :ensure t
+  :custom
+  (vterm-max-scrollback . 10000)
+  (vterm-buffer-name-string . "vterm: %s")
+  ;; delete "C-h", add <f1> and <f2>
+  (vterm-keymap-exceptions
+   . '("<f1>" "M-[" "M-]" "C-c" "C-x" "C-u" "C-g" "C-l" "C-t" "M-x" "M-o" "C-v" "M-v" "C-y" "M-y"))
+  :config
+  ;; Workaround of not working counsel-yank-pop
+  ;; https://github.com/akermu/emacs-libvterm#counsel-yank-pop-doesnt-work
+  (defun my/vterm-counsel-yank-pop-action (orig-fun &rest args)
+    (if (equal major-mode 'vterm-mode)
+        (let ((inhibit-read-only t)
+              (yank-undo-function (lambda (_start _end) (vterm-undo))))
+          (cl-letf (((symbol-function 'insert-for-yank)
+                     (lambda (str) (vterm-send-string str t))))
+            (apply orig-fun args)))
+      (apply orig-fun args)))
+  (advice-add 'counsel-yank-pop-action :around #'my/vterm-counsel-yank-pop-action))
+
+(leaf vterm-toggle
+  :ensure t
+  :custom
+  (vterm-toggle-scope . 'project)
+  :config
+  ;; Show vterm buffer in the window located at bottom
+  (add-to-list 'display-buffer-alist
+               '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                 (display-buffer-reuse-window display-buffer-in-direction)
+                 (direction . bottom)
+                 (reusable-frames . visible)
+                 (window-height . 0.4)))
+  ;; Above display config affects all vterm command, not only vterm-toggle
+  (defun my/vterm-new-buffer-in-current-window()
+    (interactive)
+    (let ((display-buffer-alist nil))
+            (vterm)))
+  )
+
+(leaf projectile
+  :ensure t counsel-projectile
+  :require t
+  :config
+  (projectile-mode +1)
+  :defer-config
+  (customize-set-variable 'projectile-globally-ignored-modes
+                          (let ((newlist projectile-globally-ignored-modes))
+                            (add-to-list 'newlist "vterm-mode"))))
+
+(leaf vterm
+  :bind
+  ("M-[" . vterm-toggle)
+  (vterm-mode-map
+   ("M-]" . my/vterm-new-buffer-in-current-window)
+   ("C-<return>" . vterm-toggle-insert-cd)
+   ([remap projectile-previous-project-buffer] . vterm-toggle-forward)
+   ([remap projectile-next-project-buffer] . vterm-toggle-backward)))
+
+(leaf projectile
+  :bind
+  (projectile-mode-map
+   ("C-." . projectile-next-project-buffer)
+   ("C-," . projectile-previous-project-buffer)))
 
 (leaf flame-conf
   :doc "Flame Config"
@@ -383,9 +451,22 @@
 	 (lsp-prefer-flymake)
 	 (lsp-prefer-capf . t)))
 
-;; ;;----------------------------------------------;;
-;; ;;                  SKK CONFIG                  ;;
-;; ;;----------------------------------------------;;
+
+;;----------------------------------------------;;
+;;                  Mew CONFIG                  ;;
+;;----------------------------------------------;;
+(leaf mew
+  :commands mew mew-send mew-user-agent-compose
+  :setq ((read-mail-command quote mew))
+  :config
+  (when (boundp 'mail-user-agent)
+    (setq mail-user-agent 'mew-user-agent))
+  (when (fboundp 'define-mail-user-agent)
+    (define-mail-user-agent 'mew-user-agent 'mew-user-agent-compose 'mew-draft-send-message 'mew-draft-kill 'mew-send-hook)))
+
+;;----------------------------------------------;;
+;;                  SKK CONFIG                  ;;
+;;----------------------------------------------;;
 ;; ;; font conf
 ;; (set-fontset-font t 'japanese-jisx0208 "TakaoGothic")
 ;; (add-to-list 'face-font-rescale-alist '(".*Takao .*" . 1.0))
